@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon</title>
+    <link rel="shortcut icon" href="./img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <script src="script1.js"></script>
+</head>
+
+<body onload="loadPokemon()">
+
+    <div class="header-and-content">
+        <div class="header fire">
+            <div class="logo" onclick="reload()">
+                <img src="./img/logo.png" alt="">
+            </div>
+            <div class="menu-and-search">
+                <div class="text-and-input">
+                    <span>Pokémon finder</span>
+                    <div onkeyup="search()" class="input-and-search">
+                        <input id="input" type="text" placeholder="Search Pokémon..." required>
+                        <div class="image">
+                            <img src="./img/search-12-32.ico" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="menu">
+                    <span onclick="reload()">Home</span>
+                    <span onclick="showPolicy()">Datenschutz</span>
+                    <span onclick="showImprint()">Impressum</span>
+                    <!-- <img class="heart" src="./img/favorite-3-32.ico" alt=""> -->
+                </div>
+            </div>
+        </div>
+        <div class="contents" id="contents">
+            <div id="pokemon-container" class="pokemon-container">
+
+            </div>
+        </div>
+    </div>
+
+    <div id="fullscreen-bg" class="fullscreen-bg">
+
+    </div>
+
+</body>
+
+</html>
+
+<!-- <div class="moves">
+
+</div> -->
