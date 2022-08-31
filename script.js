@@ -128,7 +128,7 @@ function loadMorePokemonsbyScroll() {
  */
 
 function fullscreen(i) {
-    let fullscreen = document.getElementById('fullscreen-bg');
+    let fullscreen = document.getElementById('f-container');
     // fullscreen.innerHTML = '';
 
     for (let k = 0; k < loadedPokemons[i]['types'].length; k++) {
@@ -684,4 +684,11 @@ function showPolicy() {
     </p>
     </div>   
     `;
+}
+
+
+// stop propagation
+
+function doNotClose(event) {
+    event.stopPropagation();
 }
