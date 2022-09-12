@@ -3,6 +3,24 @@ body {
     font-family: 'Inter', Roboto, "Helvetica Neue", sans-serif;
 }
 
+::-webkit-scrollbar {
+    width: 20px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 3px 2px 5px yellowgreen;
+    background: rgba(255, 255, 0, 0.24);
+}
+
+::-webkit-scrollbar-thumb {
+    background: greenyellow;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: yellowgreen;
+}
+
 .header-and-content {
     height: 100vh;
     width: 100%;
