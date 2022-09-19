@@ -9,20 +9,22 @@
     <link rel="shortcut icon" href="./img/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/cookie-bar/cookiebar-latest.min.js?tracking=1&thirdparty=1&always=1"></script>
+
 </head>
 
 <body onload="loadPokemon()">
 
     <div class="header-and-content">
         <div class="header fire">
-            <div class="logo" onclick="reload()">
+            <div class="logo logo opac-1" onclick="reload()">
                 <img src="./img/logo.png" alt="">
             </div>
             <div class="text-and-input">
                 <span>Pokémon finder</span>
                 <div onkeyup="search()" class="input-and-search">
                     <input id="input" type="text" placeholder="Search Pokémon..." required>
-                    <div class="image">
+                    <div class="image opac-1">
                         <img src="./img/search-12-32.ico" alt="">
                     </div>
                 </div>

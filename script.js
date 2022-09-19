@@ -1,17 +1,18 @@
 let currentPokemon;
 let loadedPokemons = [];
 let likedPokemons = [];
-
-let limit = 800;
+let limit = 620;
 let firstPokemon = 0;
 let lastPokemon = 20;
-
 let pokemonsContainer;
 let pokemonId;
 let pokemonPic1;
 let pokemonPic2;
 let pokemonName;
 let pokemonsType;
+let next_pokemon_sound = new Audio('./audio/next_pokemon.mp3')
+let open_fullscreen_sound = new Audio('./audio/open_fullscreen.mp3')
+let close_fullscreen_sound = new Audio('./audio/close_fullscreen.mp3')
 
 
 /**
@@ -136,77 +137,40 @@ function fullscreen(i) {
 
         fullscreen.innerHTML = `
     <div class="fullscreen ${pokemonsType}" id="fullscreen">
-        <div class="close-btn" onclick="closeFullscreen()">
-            <img src="./img/multiply-2-32.ico" alt="">
+        <div class="close-btn" >
+            <img onclick="closeFullscreen()" class="opac-1" src="./img/multiply-2-32.ico" alt="">
         </div>
         <div class="next-and-previous-btns">
-            <img onclick="previousPokemon(${i})" src="./img/left.ico" alt="">
-            <img onclick="nextPokemon(${i})" src="./img/right.ico" alt="">
+            <img class="opac-1" onclick="previousPokemon(${i})" src="./img/left.ico" alt="">
+            <img class="opac-1" onclick="nextPokemon(${i})" src="./img/right.ico" alt="">
         </div>
         <div class="name-and-number">
-            <span class="name-fullscreen">${loadedPokemons[i]['name'].charAt(0).toUpperCase() + loadedPokemons[i]['name'].slice(1).toLowerCase()}</span>
+            <span class="name-fullscreen">${loadedPokemons[i]['name']}</span>
             <span class="number-fullscreen">#${loadedPokemons[i]['id']}</span>
         </div>
         <div class="type-and-like">
             <div class="types-fullscreen" id="types-fullscreen${i}">
             </div>
-           <!-- <img onclick="addToFavourites(${i})" class="heart" src="./img/heart.ico" alt=""> -->
+           <!-- <img onclick="addToFavourites(${i})" class="heart opac-1" src="./img/heart.ico" alt=""> -->
         </div>
         <div class="big-img">
             <img src="${loadedPokemons[i]['sprites']['other']['dream_world']['front_default']}" alt="">
         </div>
-
-        <div class="bottom ${pokemonsType}-type" id="bottom${i}">
-            <div class="title">
-                <div class="title-elements" onclick="showAbout()">About</div>
-                <div class="title-elements" onclick="showBaseStats()">Base Stats</div>
-                <div class="title-elements" onclick="showMoves()">Moves</div>
-            </div>
-
-            <div class="table-container">
-                <div class="about-container " id="about-container">
-                    <table class="tbl-about">
-                        <tr class="about">
-                            <td>Base experience</td>
-                            <td>${loadedPokemons[i]['base_experience']}</td>
-                        </tr>
-                        <tr>
-                            <td>Height</td>
-                            <td>${loadedPokemons[i]['height']} m</td>
-                        </tr>
-                        <tr>
-                            <td>Weight</td>
-                            <td>${loadedPokemons[i]['weight']} kg</td>
-                        </tr>
-                        <tr>
-                            <td>Abilities</td>
-                            <td id="tdAbility"></td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="stat-container d-none" id="stat-container">
-                    <table class="stat" id="stat"></table>
-                </div>
-
-                <div class="moves d-none" id="moves">
-                
-                </div>
-
-            </div>
-
-           
-
-            
-            
+    </div>
+    <div class="bottom ${pokemonsType}-type" id="bottom${i}">
+        <div class="title">
+            <div class="title-elements" onclick="showAbout(${i})">About</div>
+            <div class="title-elements" onclick="showBaseStats(${i})">Base Stats</div>
+            <div class="title-elements" onclick="showMoves(${i})">Moves</div>
+        </div>
+        <div class="bottom-content" id="bottom-content"
+               
         </div>
     </div>
     `;
     }
     renderTypeFullscreen(i);
-    RenderAbilities(i);
-    renderMoves(i);
-    renderBaseStat(i);
+    showAbout(i);
 }
 
 
@@ -236,8 +200,8 @@ function renderTypeFullscreen(i) {
  */
 function showFullscreen(i) {
     document.getElementById('fullscreen-bg').style.zIndex = 1;
+    // open_fullscreen_sound.play();
     document.body.style.overflow = 'hidden';
-
     fullscreen(i);
 }
 
@@ -246,9 +210,12 @@ function showFullscreen(i) {
  * closes fullscreen
  */
 
-function closeFullscreen(i) {
+function closeFullscreen() {
     document.getElementById('fullscreen').classList.add('d-none');
     document.getElementById('fullscreen-bg').style.zIndex = -1;
+    // close_fullscreen_sound.play();
+    // close_fullscreen_sound.volume = 0.1;
+    open_fullscreen_sound.play();
     document.body.style.overflow = 'visible';
 }
 
@@ -263,8 +230,41 @@ function RenderAbilities(i) {
     for (let m = 0; m < loadedPokemons[i]['abilities'].length; m++) {
         renderAbility.innerHTML += `
          <span class="ability-bg">${loadedPokemons[i]['abilities'][m]['ability']['name']}</span>
- `;
+        `;
     }
+}
+
+
+/**
+ * shows about section in fullscreen
+ */
+
+function renderAbout(i) {
+    for (let k = 0; k < loadedPokemons[i]['types'].length; k++) {
+        let aboutTbl = document.getElementById('about-tbl');
+
+        aboutTbl.innerHTML = `
+                <table class="tbl-about">
+                    <tr>
+                        <td>Base experience</td>
+                        <td>${loadedPokemons[i]['base_experience']}</td>
+                    </tr>
+                    <tr>
+                        <td>Height</td>
+                        <td>${loadedPokemons[i]['height']} m</td>
+                    </tr>
+                    <tr>
+                        <td>Weight</td>
+                        <td>${loadedPokemons[i]['weight']} kg</td>
+                    </tr>
+                    <tr>
+                        <td>Abilities</td>
+                        <td id="tdAbility"></td>
+                    </tr>
+                </table>
+        `;
+    }
+    RenderAbilities(i);
 }
 
 
@@ -307,10 +307,16 @@ function renderMoves(i) {
  * shows about section in fullscreen
  */
 
-function showAbout() {
-    document.getElementById('about-container').classList.remove('d-none');
-    document.getElementById('moves').classList.add('d-none');
-    document.getElementById('stat-container').classList.add('d-none');
+function showAbout(i) {
+    let bottomFullscreen = document.getElementById('bottom-content');
+    bottomFullscreen.innerHTML = '';
+
+    bottomFullscreen.innerHTML = `
+    <div class="about-tbl" id="about-tbl">
+        
+    </div>
+    `;
+    renderAbout(i);
 }
 
 
@@ -318,26 +324,36 @@ function showAbout() {
  * shows base stats section in fullscreen
  */
 
-function showBaseStats() {
-    document.getElementById('about-container').classList.add('d-none');
-    document.getElementById('moves').classList.add('d-none');
-    document.getElementById('stat-container').classList.remove('d-none');
-}
+function showBaseStats(i) {
+    let bottomFullscreen = document.getElementById('bottom-content');
+    bottomFullscreen.innerHTML = '';
 
+    bottomFullscreen.innerHTML = `
+        <div class="stat-container">
+            <table class="stat" id="stat">
+        
+            </table>
+        </div>
+    `;
+    renderBaseStat(i);
+}
 
 
 /**
  * shows move section in fullscreen
  */
 
-function showMoves() {
-    document.getElementById('about-container').classList.add('d-none');
-    document.getElementById('stat-container').classList.add('d-none');
-    document.getElementById('moves').classList.remove('d-none');
+function showMoves(i) {
+    let bottomFullscreen = document.getElementById('bottom-content');
+    bottomFullscreen.innerHTML = '';
+
+    bottomFullscreen.innerHTML = `
+    <div class="moves" id="moves">
+                
+    </div>
+    `;
+    renderMoves(i);
 }
-
-
-
 
 
 /**
@@ -345,10 +361,11 @@ function showMoves() {
  */
 
 function nextPokemon(i) {
-    if (i < loadedPokemons.length) {
-        i++;
-    } else {
+    if (i >= 619) {
         i = 0;
+    } else {
+        i++;
+        next_pokemon_sound.play();
     }
     showFullscreen(i);
 }
@@ -359,10 +376,11 @@ function nextPokemon(i) {
  */
 
 function previousPokemon(i) {
-    if (i <= loadedPokemons.length) {
-        i--;
+    if (i <= 0) {
+        i = 619;
     } else {
-        i = loadedPokemons.length;
+        i--;
+        next_pokemon_sound.play();
     }
     showFullscreen(i);
 }
@@ -376,13 +394,10 @@ function search() {
     let inputValue = document.getElementById('input').value;
     inputValue = inputValue.toLowerCase();
     document.getElementById('pokemon-container').innerHTML = '';
-    if (inputValue == 0) {
-        reload();
-    } else {
-        for (let i = 0; i < loadedPokemons.length; i++) {
-            if (loadedPokemons[i]['name'].toLowerCase().includes(inputValue)) {
-                showSearchedPokemon(i);
-            }
+
+    for (let i = 0; i < loadedPokemons.length; i++) {
+        if (loadedPokemons[i]['name'].toLowerCase().includes(inputValue)) {
+            showSearchedPokemon(i);
         }
     }
 }
@@ -424,36 +439,6 @@ function showSearchedPokemon(i) {
     }
 }
 
-
-/**
- * reloads the page
- */
-
-function reload() {
-    window.location.reload();
-}
-
-
-/**
- * adds selected pokemon  to likedPokemons array
- */
-
-function addToFavourites(i) {
-    let pokemonsCard = document.getElementById(`pokemon-card${i}`);
-    likedPokemons.push(pokemonsCard);
-}
-
-
-/**
- * adds selected pokemon  to likedPokemons array
- */
-
-// function renderFavourites(i) {
-//     for (let n  = 0; n < likedPokemons.length; n++) {
-//         const element = likedPokemons[i];
-
-//     }
-// }
 
 /**
  * shows imprint
@@ -691,4 +676,11 @@ function showPolicy() {
 
 function doNotClose(event) {
     event.stopPropagation();
+}
+
+
+// reload page
+
+function reload() {
+    window.location.reload();
 }
