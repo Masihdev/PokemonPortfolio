@@ -589,6 +589,7 @@ body {
     padding: 5px;
     border: 2px solid white;
     margin: 5px;
+    height: fit-content;
 }
 
 

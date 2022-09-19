@@ -43,33 +43,41 @@ function renderPokemons() {
     pokemonsContainer.innerHTML = '';
 
     for (let i = firstPokemon; i < lastPokemon; i++) {
-
-        pokemonId = loadedPokemons[i]['id'];
-        pokemonPic1 = loadedPokemons[i]['sprites']['other']['dream_world']['front_default'];
-        pokemonPic2 = loadedPokemons[i]['sprites']['other']['home']['front_default'];
-        pokemonName = loadedPokemons[i]['name'].charAt(0).toUpperCase() + loadedPokemons[i]['name'].slice(1).toLowerCase();
-        pokemonsType = loadedPokemons[i]['types'][0]['type']['name'];
-
-        pokemonsContainer.innerHTML += `
-            <div id="pokemon-card${i}" class="pokemon-card ${pokemonsType}" onclick="showFullscreen(${i})">
-                <div class="pok-number-and-pic">
-                    <div class="pok-number">
-                        <span>#0${pokemonId}</span>
-                    </div>
-                    <div class="pok-img">
-                        <img src="${pokemonPic1}" alt="">
-                    </div>
-                </div>
-                <div class="pok-name-and-type" id="pok-name-and-type${i}">
-                    <div class="name">
-                        <span>${pokemonName}</span>
-                    </div>
-                </div>
-            </div>
-    `;
+        pokemonsContainer.innerHTML += generatePokCard(i);
         renderType(i);
     }
     loadMorePokemonsbyScroll();
+}
+
+
+/**
+ * generate pokemon card 
+ */
+
+function generatePokCard(i) {
+    pokemonId = loadedPokemons[i]['id'];
+    pokemonPic1 = loadedPokemons[i]['sprites']['other']['dream_world']['front_default'];
+    pokemonPic2 = loadedPokemons[i]['sprites']['other']['home']['front_default'];
+    pokemonName = loadedPokemons[i]['name'].charAt(0).toUpperCase() + loadedPokemons[i]['name'].slice(1).toLowerCase();
+    pokemonsType = loadedPokemons[i]['types'][0]['type']['name'];
+
+    return `
+    <div id="pokemon-card${i}" class="pokemon-card ${pokemonsType}" onclick="showFullscreen(${i})">
+        <div class="pok-number-and-pic">
+            <div class="pok-number">
+                <span>#0${pokemonId}</span>
+            </div>
+            <div class="pok-img">
+                <img src="${pokemonPic1}" alt="">
+            </div>
+        </div>
+        <div class="pok-name-and-type" id="pok-name-and-type${i}">
+            <div class="name">
+                <span>${pokemonName}</span>
+            </div>
+        </div>
+    </div>
+    `;
 }
 
 
@@ -83,7 +91,6 @@ function renderType(i) {
     let typesContainer = document.getElementById(`pok-name-and-type${i}`);
 
     for (let j = 0; j < loadedPokemons[i]['types'].length; j++) {
-
         pokemonsType = loadedPokemons[i]['types'][j]['type']['name'];
 
         typesContainer.innerHTML += `
@@ -134,8 +141,21 @@ function fullscreen(i) {
 
     for (let k = 0; k < loadedPokemons[i]['types'].length; k++) {
         pokemonsType = loadedPokemons[i]['types'][0]['type']['name'];
+        fullscreen.innerHTML = generateBigCard(i);
+    }
+    renderTypeFullscreen(i);
+    showAbout(i);
+}
 
-        fullscreen.innerHTML = `
+
+/**
+ * loads more pokemons while scrolling down
+ */
+
+function generateBigCard(i) {
+    pokemonsType = loadedPokemons[i]['types'][0]['type']['name'];
+
+    return `
     <div class="fullscreen ${pokemonsType}" id="fullscreen">
         <div class="close-btn" >
             <img onclick="closeFullscreen()" class="opac-1" src="./img/multiply-2-32.ico" alt="">
@@ -151,7 +171,7 @@ function fullscreen(i) {
         <div class="type-and-like">
             <div class="types-fullscreen" id="types-fullscreen${i}">
             </div>
-           <!-- <img onclick="addToFavourites(${i})" class="heart opac-1" src="./img/heart.ico" alt=""> -->
+        <!-- <img onclick="addToFavourites(${i})" class="heart opac-1" src="./img/heart.ico" alt=""> -->
         </div>
         <div class="big-img">
             <img src="${loadedPokemons[i]['sprites']['other']['dream_world']['front_default']}" alt="">
@@ -164,13 +184,10 @@ function fullscreen(i) {
             <div class="title-elements" onclick="showMoves(${i})">Moves</div>
         </div>
         <div class="bottom-content" id="bottom-content"
-               
+           
         </div>
     </div>
     `;
-    }
-    renderTypeFullscreen(i);
-    showAbout(i);
 }
 
 
@@ -404,29 +421,22 @@ function search() {
 
 
 /**
+ * on enter-click runsearch function
+ */
+
+function key(e) {
+    if (e.keyCode == 13) {
+        search();
+    }
+}
+
+
+/**
  * renders found pokemons
  */
 
 function showSearchedPokemon(i) {
-    pokemonsType = loadedPokemons[i]['types'][0]['type']['name'];
-    document.getElementById('pokemon-container').innerHTML += `
-        <div id="pokemon-card${i}" class="pokemon-card ${pokemonsType}" onclick="showFullscreen(${i})">
-            <div class="pok-number-and-pic">
-                <div class="pok-number">
-                    <span>#0${loadedPokemons[i]['id']}</span>
-                </div>
-                <div class="pok-img">
-                    <img src="${loadedPokemons[i]['sprites']['other']['dream_world']['front_default']}" alt="">
-                </div>
-            </div>
-            <div class="pok-name-and-type" id="pok-name-and-type${i}">
-                <div class="name">
-                    <span>${loadedPokemons[i]['name'].toUpperCase()}</span>
-                </div>
-                
-            </div>
-        </div>
-       `;
+    document.getElementById('pokemon-container').innerHTML += generatePokSearchedCard(i);
     for (let j = 0; j < loadedPokemons[i]['types'].length; j++) {
         let typesContainer = document.getElementById(`pok-name-and-type${i}`);
         pokemonsType = loadedPokemons[i]['types'][j]['type']['name'];
@@ -437,6 +447,33 @@ function showSearchedPokemon(i) {
         </div>
         `;
     }
+}
+
+
+/**
+ * generate card for searched pokemon
+ */
+
+function generatePokSearchedCard(i) {
+    pokemonsType = loadedPokemons[i]['types'][0]['type']['name'];
+
+    return `
+    <div id="pokemon-card${i}" class="pokemon-card ${pokemonsType}" onclick="showFullscreen(${i})">
+        <div class="pok-number-and-pic">
+            <div class="pok-number">
+                <span>#0${loadedPokemons[i]['id']}</span>
+            </div>
+            <div class="pok-img">
+                <img src="${loadedPokemons[i]['sprites']['other']['dream_world']['front_default']}" alt="">
+            </div>
+        </div>
+        <div class="pok-name-and-type" id="pok-name-and-type${i}">
+            <div class="name">
+                <span>${loadedPokemons[i]['name'].toUpperCase()}</span>
+            </div>
+        </div>
+    </div>
+   `;
 }
 
 
@@ -682,5 +719,5 @@ function doNotClose(event) {
 // reload page
 
 function reload() {
-    window.location.reload();
+    location.reload();
 }

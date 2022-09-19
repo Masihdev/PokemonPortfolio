@@ -22,10 +22,10 @@
             </div>
             <div class="text-and-input">
                 <span>Pokémon finder</span>
-                <div onkeyup="search()" class="input-and-search">
-                    <input id="input" type="text" placeholder="Search Pokémon..." required>
+                <div class="input-and-search">
+                    <input onkeyup="key(event)" id="input" type="text" placeholder="Search Pokémon..." required>
                     <div class="image opac-1">
-                        <img src="./img/search-12-32.ico" alt="">
+                        <img onclick="search()" src="./img/search-12-32.ico" alt="">
                     </div>
                 </div>
             </div>
