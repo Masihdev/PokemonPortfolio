@@ -89,6 +89,7 @@ body {
     border-radius: 10px;
     outline: none;
     border: 5px dotted yellow;
+    color: rgba(0, 0, 0, 0.6);
 }
 
 .image {
